@@ -14,11 +14,14 @@ import com.mustafa.weatherapp.domain.provider.LocationProvider
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class LocationServiceImpl(private val context: Context,private val fusedLocationClient: FusedLocationProviderClient) : LocationProvider {
+class LocationServiceImpl(
+    private val context: Context,
+    private val fusedLocationClient: FusedLocationProviderClient
+) : LocationProvider {
 
     @SuppressLint("MissingPermission")
     override suspend fun getCurrentLocation(): AppLocation? = suspendCoroutine { continuation ->
-        if (!   isHasPermissionLocation()) {
+        if (!isHasPermissionLocation()) {
             continuation.resume(null)
             return@suspendCoroutine
         }
@@ -33,10 +36,14 @@ class LocationServiceImpl(private val context: Context,private val fusedLocation
     }
 
     private fun isHasPermissionLocation(): Boolean {
-        return ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) ==
-                PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) ==
-                PackageManager.PERMISSION_GRANTED
+        return ActivityCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
     }
 
 }
