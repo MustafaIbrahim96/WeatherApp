@@ -1,17 +1,39 @@
 package com.mustafa.weatherapp.data.datasource.remote.mapper
 
 import android.location.Location
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.mustafa.weatherapp.data.datasource.remote.dto.CurrentWeatherDto
+import com.mustafa.weatherapp.data.datasource.remote.dto.CurrentWeatherUnitsDto
+import com.mustafa.weatherapp.data.datasource.remote.dto.DailyDto
+import com.mustafa.weatherapp.data.datasource.remote.dto.DailyUnitsDto
+import com.mustafa.weatherapp.data.datasource.remote.dto.HourlyDto
+import com.mustafa.weatherapp.data.datasource.remote.dto.HourlyUnitsDto
 import com.mustafa.weatherapp.data.datasource.remote.dto.WeatherResponseDto
+import com.mustafa.weatherapp.data.datasource.util.getDayName
 import com.mustafa.weatherapp.domain.entity.AppLocation
 import com.mustafa.weatherapp.domain.entity.CurrentWeather
+import com.mustafa.weatherapp.domain.entity.CurrentWeatherUnit
+import com.mustafa.weatherapp.domain.entity.DailyWeather
+import com.mustafa.weatherapp.domain.entity.DailyWeatherData
+import com.mustafa.weatherapp.domain.entity.DailyWeatherUnit
+import com.mustafa.weatherapp.domain.entity.HourlyWeather
+import com.mustafa.weatherapp.domain.entity.HourlyWeatherData
+import com.mustafa.weatherapp.domain.entity.HourlyWeatherUnit
 import com.mustafa.weatherapp.domain.entity.Weather
 import org.example.domain.model.entity.weather.WeatherCondition
+import org.slf4j.helpers.Util
 
+@RequiresApi(Build.VERSION_CODES.O)
 fun WeatherResponseDto.toWeather(): Weather {
     return Weather(
         timeZone = this.timeZone,
-        currentWeather = this.currentWeatherDto.toCurrentWeather()
+        currentWeather = this.currentWeatherDto.toCurrentWeather(),
+        currentWeatherUnit = this.currentWeatherUnitsDto.toCurrentWeatherUnits(),
+        hourlyWeatherUnit = this.hourlyUnitsDto.toHourlyWeatherUnit(),
+        hourlyWeather = this.hourlyDto.toHourlyWeather(),
+        dailyWeatherUnit = this.dailyUnitsDto.toDailyWeatherUnit(),
+        DailyWeather = this.dailyDto.toDailyDtoWeather(),
     )
 }
 
@@ -22,8 +44,63 @@ fun CurrentWeatherDto.toCurrentWeather(): CurrentWeather {
         temperature = this.temperature,
         windspeed = this.windspeed,
         winddirection = this.winddirection,
-        is_day = this.is_day == 1,
+        isDay = this.is_day == 1,
         weathercode = mapWeatherCodeToCondition(this.weathercode)
+    )
+}
+
+fun CurrentWeatherUnitsDto.toCurrentWeatherUnits(): CurrentWeatherUnit {
+    return CurrentWeatherUnit(
+        time = this.time,
+        interval = this.interval,
+        temperature = this.temperature,
+        windspeed = this.windspeed,
+        winddirection = this.winddirection,
+        isDay = this.isDay,
+        weathercode = this.weathercode
+    )
+}
+
+fun HourlyUnitsDto.toHourlyWeatherUnit(): HourlyWeatherUnit {
+    return HourlyWeatherUnit(
+        time = this.time,
+        temperature2m = this.temperature2m,
+        weathercode = this.weathercode
+    )
+}
+
+fun HourlyDto.toHourlyWeather(): HourlyWeather {
+    return HourlyWeather(
+        hourly = this.time.indices.map { index ->
+            HourlyWeatherData(
+                date = time[index],
+                temp = temperature2m[index],
+                weatherCode = mapWeatherCodeToCondition(weathercode[index])
+            )
+        }
+    )
+}
+
+fun DailyUnitsDto.toDailyWeatherUnit(): DailyWeatherUnit {
+    return DailyWeatherUnit(
+        time = this.time,
+        temperature2mMax = this.temperature2mMax,
+        temperature2mMin = this.temperature2mMin,
+        weathercode = this.weathercode
+    )
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun DailyDto.toDailyDtoWeather(): DailyWeather {
+    return DailyWeather(
+        days = this.time.indices.map { index ->
+            DailyWeatherData(
+                date = getDayName(time[index]),
+                maxTemp = temperature2mMax[index],
+                minTemp = temperature2mMin[index],
+                weatherCode = mapWeatherCodeToCondition(weathercode[index])
+            )
+        }
     )
 }
 
