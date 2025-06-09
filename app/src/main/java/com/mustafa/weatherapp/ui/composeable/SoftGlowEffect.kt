@@ -13,9 +13,9 @@ import com.mustafa.weatherapp.ui.theme.bluerColor
 fun SoftGlowEffect(
     modifier: Modifier = Modifier,
     color: Color = bluerColor,
-    radius: Float = 250f
+    radius: Float
 ) {
-    Canvas(modifier = modifier.size(250.dp)) {
+    Canvas(modifier = modifier) {
         drawCircle(
             color = color.copy(alpha = 0.32f),
             radius = radius,

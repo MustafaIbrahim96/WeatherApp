@@ -2,9 +2,6 @@ package com.mustafa.weatherapp.ui.screen
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,12 +27,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mustafa.weatherapp.R
-import com.mustafa.weatherapp.ui.composeable.HeaderBeforeScroll
+import com.mustafa.weatherapp.ui.composeable.HeaderScroll
 import com.mustafa.weatherapp.ui.theme.BackgroundBottomBrush
 import com.mustafa.weatherapp.ui.theme.BackgroundTopBrush
 import com.mustafa.weatherapp.ui.viewModel.WeatherViewModel
@@ -51,36 +47,36 @@ fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel()) {
 }
 
 @RequiresApi(Build.VERSION_CODES.S)
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WeatherContent(state: WeatherUiState?) {
-    state?.let {
 
+    state?.let {
 
         val listState = rememberLazyListState()
         val isScrolled = remember {
-            derivedStateOf { listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 100 }
+            derivedStateOf {
+                listState.firstVisibleItemIndex > 0
+                        || listState.firstVisibleItemScrollOffset > 100
+            }
         }
 
         LazyColumn(
             state = listState,
-            modifier = Modifier.fillMaxSize().background(brush = Brush.verticalGradient(
-                colors = listOf(BackgroundTopBrush, BackgroundBottomBrush)
-            ) )
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(BackgroundTopBrush, BackgroundBottomBrush)
+                    )
+                )
         ) {
-            stickyHeader {
-                AnimatedVisibility(visible = !isScrolled.value) {
-                    HeaderBeforeScroll(state)
-                }
-
-                AnimatedVisibility(visible = isScrolled.value) {
-                    HeaderAfterScroll()
-                }
-            }
-
-
             item {
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(24.dp))
+            }
+            item {
+                HeaderScroll(state, isScrolled.value)
+            }
+            item {
                 WeatherDetailsGrid()
             }
             item {
@@ -100,14 +96,6 @@ fun WeatherContent(state: WeatherUiState?) {
                 WeatherDetailsGrid()
             }
 
-
-            item {
-                //HourlyForecastSection()
-            }
-
-            item {
-               // DailyForecastSection()
-            }
         }
 
     } ?: Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -115,23 +103,6 @@ fun WeatherContent(state: WeatherUiState?) {
     }
 }
 
-
-
-@Composable
-fun HeaderAfterScroll() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.White)
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Image(painterResource(id = R.drawable.img_partly_cloudy_day), contentDescription = null)
-        Text("Baghdad", fontSize = 18.sp)
-        Text("24°C", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-    }
-}
 
 @Composable
 fun WeatherDetailsGrid() {
@@ -164,4 +135,11 @@ fun WeatherDetailCard(value: String, label: String) {
         Text(text = value, fontSize = 16.sp, fontWeight = FontWeight.Bold)
         Text(text = label, fontSize = 14.sp, color = Color.Gray)
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.S)
+@Preview
+@Composable
+private fun WeatherScreenPreview() {
+    WeatherScreen()
 }

@@ -27,6 +27,6 @@ class WeatherViewModel(private val getWeatherUseCase: GetWeatherUseCase) : ViewM
 
 fun Weather.toUiState(): WeatherUiState {
     return WeatherUiState(
-        weather = this
+        weather = this.copy(currentWeather = this.currentWeather.copy())
     )
 }
