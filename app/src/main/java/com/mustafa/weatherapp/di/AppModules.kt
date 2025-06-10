@@ -29,6 +29,7 @@ val appModule = module {
     single<FusedLocationProviderClient> {
         LocationServices.getFusedLocationProviderClient(get<Context>())
     }
+
     single<LocationProvider> {
         LocationServiceImpl(
             context = androidContext(),

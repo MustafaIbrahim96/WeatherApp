@@ -36,8 +36,8 @@ fun DailyTempColumn(modifier: Modifier, weatherUiState: WeatherUiState) {
     ) {
 
         Text(
-            "${weatherUiState.weather.currentWeather.temperature}" +
-                    weatherUiState.weather.currentWeatherUnit.temperature, fontSize = 64.sp,
+            "${weatherUiState.weather.currentWeather.temperature2m}" +
+                    weatherUiState.weather.currentWeatherUnit.temperature2m, fontSize = 64.sp,
             fontFamily = Urbanist_font,
             fontWeight = FontWeight.SemiBold,
             lineHeight = 64.sp,
@@ -46,7 +46,7 @@ fun DailyTempColumn(modifier: Modifier, weatherUiState: WeatherUiState) {
         )
 
         Text(
-            weatherUiState.weather.currentWeather.weathercode.displayName,
+            weatherUiState.weather.currentWeather.weatherCode.displayName,
             fontSize = 16.sp,
             fontFamily = Urbanist_font,
             fontWeight = FontWeight.Medium,
@@ -70,7 +70,7 @@ fun DailyTempColumn(modifier: Modifier, weatherUiState: WeatherUiState) {
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    "${weatherUiState.weather.DailyWeather.days[0].maxTemp}"
+                    "${weatherUiState.weather.dailyWeather.days[0].maxTemp}"
                             + weatherUiState.weather.dailyWeatherUnit.temperature2mMax,
                     fontSize = 16.sp,
                     fontFamily = Urbanist_font,
@@ -93,7 +93,7 @@ fun DailyTempColumn(modifier: Modifier, weatherUiState: WeatherUiState) {
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    "${weatherUiState.weather.DailyWeather.days[0].minTemp}"
+                    "${weatherUiState.weather.dailyWeather.days[0].minTemp}"
                             + weatherUiState.weather.dailyWeatherUnit.temperature2mMax,
                     fontSize = 16.sp,
                     fontFamily = Urbanist_font,

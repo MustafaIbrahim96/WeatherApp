@@ -10,34 +10,42 @@ data class Weather(
     val hourlyWeatherUnit: HourlyWeatherUnit,
     val hourlyWeather: HourlyWeather,
     val dailyWeatherUnit: DailyWeatherUnit,
-    val DailyWeather: DailyWeather,
+    val dailyWeather: DailyWeather,
 
     )
 
 data class CurrentWeather(
+
     val time: String,
     val interval: Int,
-    val temperature: Double,
-    val windspeed: Double,
-    val winddirection: Int,
+    val weatherCode: WeatherCondition,
+    val relativeHumidity2m: Int,
+    val windSpeed10m: Double,
+    val precipitationProbability: Int,
+    val surfacePressure: Double,
+    val apparentTemperature: Double,
+    val temperature2m: Double,
     val isDay: Boolean,
-    val weathercode: WeatherCondition
-)
+
+    )
 
 data class CurrentWeatherUnit(
     val time: String,
     val interval: String,
-    val temperature: String,
-    val windspeed: String,
-    val winddirection: String,
+    val weatherCode: String,
+    val relativeHumidity2m: String,
+    val windSpeed10m: String,
+    val precipitationProbability: String,
+    val surfacePressure: String,
+    val apparentTemperature: String,
+    val temperature2m: String,
     val isDay: String,
-    val weathercode: String
 )
 
 data class HourlyWeatherUnit(
     val time: String,
     val temperature2m: String,
-    val weathercode: String
+    val weatherCode: String
 )
 
 data class HourlyWeather(
@@ -54,7 +62,8 @@ data class DailyWeatherUnit(
     val time: String,
     val temperature2mMin: String,
     val temperature2mMax: String,
-    val weathercode: String
+    val weatherCode: String,
+    val uvIndexMax:String
 )
 
 
@@ -66,6 +75,7 @@ data class DailyWeatherData(
     val date: String,
     val maxTemp: Double,
     val minTemp: Double,
-    val weatherCode: WeatherCondition
+    val weatherCode: WeatherCondition,
+    val uvIndexMax:Double
 )
 

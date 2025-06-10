@@ -10,6 +10,7 @@ import com.mustafa.weatherapp.data.datasource.remote.dto.DailyUnitsDto
 import com.mustafa.weatherapp.data.datasource.remote.dto.HourlyDto
 import com.mustafa.weatherapp.data.datasource.remote.dto.HourlyUnitsDto
 import com.mustafa.weatherapp.data.datasource.remote.dto.WeatherResponseDto
+import com.mustafa.weatherapp.data.datasource.util.getCurrentDateFormatted
 import com.mustafa.weatherapp.data.datasource.util.getDayName
 import com.mustafa.weatherapp.domain.entity.AppLocation
 import com.mustafa.weatherapp.domain.entity.CurrentWeather
@@ -22,7 +23,8 @@ import com.mustafa.weatherapp.domain.entity.HourlyWeatherData
 import com.mustafa.weatherapp.domain.entity.HourlyWeatherUnit
 import com.mustafa.weatherapp.domain.entity.Weather
 import org.example.domain.model.entity.weather.WeatherCondition
-import org.slf4j.helpers.Util
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun WeatherResponseDto.toWeather(): Weather {
@@ -31,9 +33,9 @@ fun WeatherResponseDto.toWeather(): Weather {
         currentWeather = this.currentWeatherDto.toCurrentWeather(),
         currentWeatherUnit = this.currentWeatherUnitsDto.toCurrentWeatherUnits(),
         hourlyWeatherUnit = this.hourlyUnitsDto.toHourlyWeatherUnit(),
-        hourlyWeather = this.hourlyDto.toHourlyWeather(),
+        hourlyWeather = this.hourlyDto.toHourlyWeatherForToday(),
         dailyWeatherUnit = this.dailyUnitsDto.toDailyWeatherUnit(),
-        DailyWeather = this.dailyDto.toDailyDtoWeather(),
+        dailyWeather = this.dailyDto.toDailyDtoWeather(),
     )
 }
 
@@ -41,11 +43,14 @@ fun CurrentWeatherDto.toCurrentWeather(): CurrentWeather {
     return CurrentWeather(
         time = this.time,
         interval = this.interval,
-        temperature = this.temperature,
-        windspeed = this.windspeed,
-        winddirection = this.winddirection,
-        isDay = this.is_day == 1,
-        weathercode = mapWeatherCodeToCondition(this.weathercode)
+        weatherCode = mapWeatherCodeToCondition(this.weatherCode),
+        relativeHumidity2m = this.relativeHumidity2m,
+        windSpeed10m = this.windspeed10m,
+        precipitationProbability = this.precipitationProbability,
+        surfacePressure = this.surfacepressure,
+        apparentTemperature = this.apparentTemperature,
+        temperature2m = this.temperature2m,
+        isDay = this.isDay == 1,
     )
 }
 
@@ -53,11 +58,14 @@ fun CurrentWeatherUnitsDto.toCurrentWeatherUnits(): CurrentWeatherUnit {
     return CurrentWeatherUnit(
         time = this.time,
         interval = this.interval,
-        temperature = this.temperature,
-        windspeed = this.windspeed,
-        winddirection = this.winddirection,
+        weatherCode = this.weatherCode,
+        relativeHumidity2m = this.relativeHumidity2m,
+        windSpeed10m = this.windspeed10m,
+        precipitationProbability = this.precipitationProbability,
+        surfacePressure = this.surfacepressure,
+        apparentTemperature = this.apparentTemperature,
+        temperature2m = this.temperature2m,
         isDay = this.isDay,
-        weathercode = this.weathercode
     )
 }
 
@@ -65,17 +73,32 @@ fun HourlyUnitsDto.toHourlyWeatherUnit(): HourlyWeatherUnit {
     return HourlyWeatherUnit(
         time = this.time,
         temperature2m = this.temperature2m,
-        weathercode = this.weathercode
+        weatherCode = this.weathercode
     )
 }
 
-fun HourlyDto.toHourlyWeather(): HourlyWeather {
+@RequiresApi(Build.VERSION_CODES.O)
+fun HourlyDto.toHourlyWeatherForToday(): HourlyWeather {
+
+    val todayDateString = getCurrentDateFormatted()
+    val fullDateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")
+
+    val filteredIndices = mutableListOf<Int>()
+
+
+    this.time.indices.forEach { index ->
+        val dateTimeFromApi = LocalDateTime.parse(this.time[index], fullDateTimeFormatter)
+        if (dateTimeFromApi.toLocalDate().toString() == todayDateString) {
+            filteredIndices.add(index)
+        }
+    }
+
     return HourlyWeather(
-        hourly = this.time.indices.map { index ->
+        hourly = filteredIndices.map { index ->
             HourlyWeatherData(
-                date = time[index],
-                temp = temperature2m[index],
-                weatherCode = mapWeatherCodeToCondition(weathercode[index])
+                date = this.time[index],
+                temp = this.temperature2m[index],
+                weatherCode = mapWeatherCodeToCondition(this.weathercode[index])
             )
         }
     )
@@ -86,7 +109,8 @@ fun DailyUnitsDto.toDailyWeatherUnit(): DailyWeatherUnit {
         time = this.time,
         temperature2mMax = this.temperature2mMax,
         temperature2mMin = this.temperature2mMin,
-        weathercode = this.weathercode
+        weatherCode = this.weathercode,
+        uvIndexMax = this.uvIndexMax
     )
 }
 
@@ -98,7 +122,9 @@ fun DailyDto.toDailyDtoWeather(): DailyWeather {
                 date = getDayName(time[index]),
                 maxTemp = temperature2mMax[index],
                 minTemp = temperature2mMin[index],
-                weatherCode = mapWeatherCodeToCondition(weathercode[index])
+                weatherCode = mapWeatherCodeToCondition(weathercode[index]),
+                uvIndexMax = uvIndexMax[index]
+
             )
         }
     )
@@ -119,9 +145,9 @@ private fun mapWeatherCodeToCondition(code: Int): WeatherCondition {
         3 -> WeatherCondition.OVERCAST
         45 -> WeatherCondition.FOG
         48 -> WeatherCondition.DEPOSITING_RIME_FOG
-        51  -> WeatherCondition.DRIZZLE_LIGHT
-         53 -> WeatherCondition.DRIZZLE_MODERATE
-         55 -> WeatherCondition.DRIZZLE_DENSE
+        51 -> WeatherCondition.DRIZZLE_LIGHT
+        53 -> WeatherCondition.DRIZZLE_MODERATE
+        55 -> WeatherCondition.DRIZZLE_DENSE
         56 -> WeatherCondition.FREEZING_DRIZZLE_LIGHT
         57 -> WeatherCondition.FREEZING_DRIZZLE_DENSE
         61 -> WeatherCondition.RAIN_SLIGHT

@@ -12,8 +12,11 @@ class WeatherApiImpl(private val client: HttpClient) : WeatherApi {
         val response = client.get("https://api.open-meteo.com/v1/forecast") {
             parameter("latitude", latitude)
             parameter("longitude", longitude)
-            parameter("current_weather", true)
-            parameter("daily", "temperature_2m_max,temperature_2m_min,weathercode")
+            parameter(
+                "current",
+                "weather_code,relative_humidity_2m,wind_speed_10m,precipitation_probability,surface_pressure,apparent_temperature,temperature_2m,is_day"
+            )
+            parameter("daily", "temperature_2m_max,temperature_2m_min,weathercode,uv_index_max")
             parameter("timezone", "auto")
             parameter("hourly", "temperature_2m,weathercode")
         }

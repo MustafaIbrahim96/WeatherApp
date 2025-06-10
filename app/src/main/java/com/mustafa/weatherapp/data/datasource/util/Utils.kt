@@ -14,3 +14,7 @@ fun getDayName(dateString: String): String {
     val date = LocalDate.parse(dateString, formatter)
     return date.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.ENGLISH)
 }
+
+fun getCurrentDateFormatted(): String {
+    return LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+}

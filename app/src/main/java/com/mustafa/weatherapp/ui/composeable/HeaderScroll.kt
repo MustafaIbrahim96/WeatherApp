@@ -3,9 +3,12 @@ package com.mustafa.weatherapp.ui.composeable
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,49 +42,56 @@ fun HeaderScroll(
     isScrolled: Boolean
 ) {
     val isDay = weatherUiState.weather.currentWeather.isDay
-    val weatherCode = weatherUiState.weather.currentWeather.weathercode
+    val weatherCode = weatherUiState.weather.currentWeather.weatherCode
+
 
     // Animation values
     val imageSize by animateDpAsState(
         targetValue = if (isScrolled) 124.dp else 220.dp,
-        animationSpec = tween(durationMillis = 3000)
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessLow
+        )
     )
-    val locationTopPadding by animateFloatAsState(
-        targetValue = if (isScrolled) 24f else 0f,
-        animationSpec = tween(durationMillis = 3000)
+    val locationTopPadding by animateDpAsState(
+        targetValue = if (isScrolled) 2.dp else 0.dp,
+        animationSpec = tween(durationMillis = 375)
     )
-    val columnTempPaddingTop by animateFloatAsState(
-        targetValue = if (isScrolled) 12f else 226f,
-        animationSpec = tween(durationMillis = 3000)
+    val columnTempPaddingTop by animateDpAsState(
+        targetValue = if (isScrolled) 12.dp else 226.dp,
+        animationSpec = tween(durationMillis = 375)
     )
-    val columnTempPaddingEnd by animateFloatAsState(
-        targetValue = if (isScrolled) 12f else 90f,
-        animationSpec = tween(durationMillis = 3000)
+    val columnTempPaddingEnd by animateDpAsState(
+        targetValue = if (isScrolled) 12.dp else 90.dp,
+        animationSpec = tween(durationMillis = 375)
     )
-    val columnTempPaddingStart by animateFloatAsState(
-        targetValue = if (isScrolled) 0f else 90f,
-        animationSpec = tween(durationMillis = 3000)
+
+    val columnTempPaddingStart by animateDpAsState(
+        targetValue = if (isScrolled) 0.dp else 90.dp,
+        animationSpec = tween(durationMillis = 375)
     )
     val BoximagesPaddingStart by animateFloatAsState(
         targetValue = if (isScrolled) 12f else 67f,
-        animationSpec = tween(durationMillis = 3000)
+        animationSpec = tween(durationMillis = 375)
     )
     val BoximagesPaddingEnd by animateFloatAsState(
         targetValue = if (isScrolled) 44f else 73f,
-        animationSpec = tween(durationMillis = 3000)
+        animationSpec = tween(durationMillis = 375)
     )
     val imagePaddingTop by animateFloatAsState(
-        targetValue = if (isScrolled) 36f else 0f,
-        animationSpec = tween(durationMillis = 3000)
+        targetValue = if (isScrolled) 20f else 0f,
+        animationSpec = tween(durationMillis = 375)
     )
 
 
     Column(
-        modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Row(modifier = Modifier.padding(top = locationTopPadding.dp)) {
+        Row(modifier = Modifier.padding(top = locationTopPadding)) {
             Icon(
                 painter = painterResource(R.drawable.ic_location),
                 contentDescription = "location icon",
@@ -89,7 +99,7 @@ fun HeaderScroll(
             )
             Spacer(Modifier.width(8.dp))
             Text(
-                text = weatherUiState.weather.timeZone,
+                text = weatherUiState.weather.timeZone.split("/")[1],
                 fontSize = 16.sp,
                 lineHeight = 20.sp,
                 color = CityColor,
@@ -107,7 +117,11 @@ fun HeaderScroll(
 
             Box(
                 modifier = Modifier
-                    .padding(end = BoximagesPaddingEnd.dp, start = BoximagesPaddingStart.dp)
+                    .padding(
+                        end = BoximagesPaddingEnd.dp,
+                        start = BoximagesPaddingStart.dp,
+                        top = imagePaddingTop.dp
+                    )
                     .size(imageSize)
 
             ) {
@@ -122,7 +136,6 @@ fun HeaderScroll(
                     contentDescription = null,
                     contentScale = ContentScale.Inside,
                     modifier = Modifier
-                        .padding(top = imagePaddingTop.dp)
                         .size(imageSize)
                         .align(Alignment.CenterEnd)
 
@@ -133,9 +146,9 @@ fun HeaderScroll(
                 modifier = Modifier
                     .align(if (isScrolled) Alignment.CenterEnd else Alignment.BottomEnd)
                     .padding(
-                        top = columnTempPaddingTop.dp,
-                        end = columnTempPaddingEnd.dp,
-                        start = columnTempPaddingStart.dp
+                        top = columnTempPaddingTop,
+                        end = columnTempPaddingEnd,
+                        start = columnTempPaddingStart
                     ),
                 weatherUiState = weatherUiState
             )

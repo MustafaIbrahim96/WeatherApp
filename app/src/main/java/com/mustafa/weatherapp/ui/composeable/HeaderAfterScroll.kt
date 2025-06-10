@@ -34,7 +34,7 @@ import org.example.domain.model.entity.weather.WeatherCondition
 fun HeaderAfterScroll(weatherUiState: WeatherUiState) {
 
     val isDay = weatherUiState.weather.currentWeather.isDay
-    val weatherCode = weatherUiState.weather.currentWeather.weathercode
+    val weatherCode = weatherUiState.weather.currentWeather.weatherCode
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Spacer(modifier = Modifier.height(24.dp))

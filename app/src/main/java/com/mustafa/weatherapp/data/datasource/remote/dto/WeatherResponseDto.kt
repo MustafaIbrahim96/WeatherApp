@@ -21,9 +21,9 @@ data class WeatherResponseDto(
     val timezoneAbbreviation: String,
     @SerialName("elevation")
     val elevation: Double,
-    @SerialName("current_weather_units")
+    @SerialName("current_units")
     val currentWeatherUnitsDto: CurrentWeatherUnitsDto,
-    @SerialName("current_weather")
+    @SerialName("current")
     val currentWeatherDto: CurrentWeatherDto,
     @SerialName("daily_units")
     val dailyUnitsDto: DailyUnitsDto,
@@ -38,19 +38,25 @@ data class WeatherResponseDto(
 @Serializable
 data class CurrentWeatherDto(
     @SerialName("time")
-    val time : String,
+    val time: String,
     @SerialName("interval")
-    val interval : Int,
-    @SerialName("temperature")
-    val temperature : Double,
-    @SerialName("windspeed")
-    val windspeed : Double,
-    @SerialName("winddirection")
-    val winddirection : Int,
+    val interval: Int,
+    @SerialName("weather_code")
+    val weatherCode: Int,
+    @SerialName("relative_humidity_2m")
+    val relativeHumidity2m: Int,
+    @SerialName("wind_speed_10m")
+    val windspeed10m: Double,
+    @SerialName("precipitation_probability")
+    val precipitationProbability: Int,
+    @SerialName("surface_pressure")
+    val surfacepressure: Double,
+    @SerialName("apparent_temperature")
+    val apparentTemperature: Double,
+    @SerialName("temperature_2m")
+    val temperature2m: Double,
     @SerialName("is_day")
-    val is_day : Int,
-    @SerialName("weathercode")
-    val weathercode : Int,
+    val isDay: Int,
 
 )
 
@@ -60,16 +66,23 @@ data class CurrentWeatherUnitsDto(
     val time: String,
     @SerialName("interval")
     val interval: String,
-    @SerialName("temperature")
-    val temperature: String,
-    @SerialName("windspeed")
-    val windspeed: String,
-    @SerialName("winddirection")
-    val winddirection: String,
+    @SerialName("weather_code")
+    val weatherCode: String,
+    @SerialName("relative_humidity_2m")
+    val relativeHumidity2m: String,
+    @SerialName("wind_speed_10m")
+    val windspeed10m: String,
+    @SerialName("precipitation_probability")
+    val precipitationProbability: String,
+    @SerialName("surface_pressure")
+    val surfacepressure: String,
+    @SerialName("apparent_temperature")
+    val apparentTemperature: String,
+    @SerialName("temperature_2m")
+    val temperature2m: String,
     @SerialName("is_day")
     val isDay: String,
-    @SerialName("weathercode")
-    val weathercode: String
+
 )
 
 @Serializable
@@ -81,7 +94,9 @@ data class DailyUnitsDto(
     @SerialName("temperature_2m_min")
     val temperature2mMin: String,
     @SerialName("weathercode")
-    val weathercode: String
+    val weathercode: String,
+    @SerialName("uv_index_max")
+    val uvIndexMax: String
 )
 
 @Serializable
@@ -93,7 +108,9 @@ data class DailyDto(
     @SerialName("temperature_2m_min")
     val temperature2mMin: List<Double>,
     @SerialName("weathercode")
-    val weathercode: List<Int>
+    val weathercode: List<Int>,
+    @SerialName("uv_index_max")
+    val uvIndexMax: List<Double>
 )
 
 @Serializable
