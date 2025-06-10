@@ -7,12 +7,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.mustafa.weatherapp.ui.theme.bluerColor
 
 @Composable
 fun SoftGlowEffect(
     modifier: Modifier = Modifier,
-    color: Color = bluerColor,
+    color: Color,
     radius: Float
 ) {
     Canvas(modifier = modifier) {

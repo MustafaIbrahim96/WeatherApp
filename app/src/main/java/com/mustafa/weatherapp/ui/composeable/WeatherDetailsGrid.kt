@@ -19,6 +19,7 @@ fun WeatherDetailsGrid(state: WeatherUiState) {
     val currentWeather = state.weather.currentWeather
     val daily = state.weather.dailyWeather
     val currentWeatherUnit = state.weather.currentWeatherUnit
+    val isDay = state.weather.currentWeather.isDay
 
     Column(modifier = Modifier.padding(horizontal = 9.dp)) {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
@@ -27,21 +28,24 @@ fun WeatherDetailsGrid(state: WeatherUiState) {
                 painterResource(id = R.drawable.ic_fast_wind),
                 "${currentWeather.windSpeed10m} " +
                         currentWeatherUnit.windSpeed10m.uppercase(),
-                "Wind"
+                "Wind",
+                isDay
             )
             CardCurrentWeather(
                 Modifier.weight(1f),
                 painterResource(id = R.drawable.ic_humidity),
                 currentWeather.relativeHumidity2m.toString() +
                         currentWeatherUnit.relativeHumidity2m,
-                "Humidity"
+                "Humidity",
+                isDay
             )
             CardCurrentWeather(
                 Modifier.weight(1f),
                 painterResource(id = R.drawable.ic_rain),
                 currentWeather.precipitationProbability.toString() +
                         currentWeatherUnit.precipitationProbability,
-                "Rain"
+                "Rain",
+                isDay
             )
         }
         Spacer(modifier = Modifier.height(6.dp))
@@ -50,21 +54,24 @@ fun WeatherDetailsGrid(state: WeatherUiState) {
                 Modifier.weight(1f),
                 painterResource(id = R.drawable.ic_uv),
                 daily.days.first().uvIndexMax.toString(),
-                "UV Index"
+                "UV Index",
+                isDay
             )
             CardCurrentWeather(
                 Modifier.weight(1f),
                 painterResource(id = R.drawable.ic_pressure),
-                currentWeather.surfacePressure.toString()+ " " +
+                currentWeather.surfacePressure.toString() + " " +
                         currentWeatherUnit.surfacePressure,
-                "Pressure"
+                "Pressure",
+                isDay
             )
             CardCurrentWeather(
                 Modifier.weight(1f),
                 painterResource(id = R.drawable.ic_temperature),
                 currentWeather.temperature2m.toString() +
                         currentWeatherUnit.temperature2m,
-                "Feels like"
+                "Feels like",
+                isDay
             )
         }
     }

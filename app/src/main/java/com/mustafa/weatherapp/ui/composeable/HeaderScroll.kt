@@ -8,7 +8,6 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,8 +30,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mustafa.weatherapp.R
-import com.mustafa.weatherapp.ui.theme.CityColor
+import com.mustafa.weatherapp.ui.theme.CityColorDay
+import com.mustafa.weatherapp.ui.theme.CityColorNight
 import com.mustafa.weatherapp.ui.theme.Urbanist_font
+import com.mustafa.weatherapp.ui.theme.bluerColorDay
+import com.mustafa.weatherapp.ui.theme.bluerColorNight
 import com.mustafa.weatherapp.ui.viewModel.state.WeatherUiState
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -82,6 +84,9 @@ fun HeaderScroll(
         animationSpec = tween(durationMillis = 600)
     )
 
+    val colorBlurSwitch = if (isDay) bluerColorDay else bluerColorNight
+    val colorSwitch = if (isDay) CityColorDay else CityColorNight
+
 
     Column(
         modifier = Modifier
@@ -94,14 +99,14 @@ fun HeaderScroll(
             Icon(
                 painter = painterResource(R.drawable.ic_location),
                 contentDescription = "location icon",
-                tint = CityColor
+                tint = colorSwitch
             )
             Spacer(Modifier.width(8.dp))
             Text(
                 text = weatherUiState.weather.timeZone.split("/")[1],
                 fontSize = 16.sp,
                 lineHeight = 20.sp,
-                color = CityColor,
+                color = colorSwitch,
                 fontFamily = Urbanist_font,
                 fontWeight = FontWeight.Medium,
                 letterSpacing = 0.25.sp
@@ -127,7 +132,8 @@ fun HeaderScroll(
                 SoftBlurredGlow(
                     modifier = Modifier.size(imageSize),
                     circleSize = imageSize,
-                    radius = imageSize.value
+                    radius = imageSize.value,
+                    blurColor = colorBlurSwitch
                 )
 
                 Image(

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asComposeRenderEffect
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.Dp
@@ -17,7 +18,7 @@ import androidx.compose.ui.unit.dp
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
-fun SoftBlurredGlow(modifier: Modifier,circleSize : Dp,radius:Float) {
+fun SoftBlurredGlow(modifier: Modifier,circleSize : Dp,radius:Float,blurColor: Color) {
     Box(
         modifier = modifier
             .graphicsLayer {
@@ -28,7 +29,8 @@ fun SoftBlurredGlow(modifier: Modifier,circleSize : Dp,radius:Float) {
     ) {
         SoftGlowEffect(
             modifier = Modifier.size(circleSize),
-            radius =  radius
+            radius =  radius,
+            color = blurColor
         )
     }
 }

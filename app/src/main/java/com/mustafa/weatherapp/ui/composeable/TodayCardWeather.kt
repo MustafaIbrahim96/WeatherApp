@@ -22,10 +22,14 @@ import androidx.compose.ui.unit.sp
 import com.mustafa.weatherapp.domain.entity.HourlyWeatherData
 import com.mustafa.weatherapp.domain.entity.HourlyWeatherUnit
 import com.mustafa.weatherapp.ui.theme.BigTitle60AColor
+import com.mustafa.weatherapp.ui.theme.BigTitle70AColor
 import com.mustafa.weatherapp.ui.theme.BigTitle87AColor
 import com.mustafa.weatherapp.ui.theme.BorderCard
 import com.mustafa.weatherapp.ui.theme.Urbanist_font
 import com.mustafa.weatherapp.ui.theme.WhIte70AColor
+import com.mustafa.weatherapp.ui.theme.White08AColor
+import com.mustafa.weatherapp.ui.theme.White60AColor
+import com.mustafa.weatherapp.ui.theme.White87AColor
 
 @Composable
 fun TodayCardWeather(
@@ -33,13 +37,20 @@ fun TodayCardWeather(
     hourlyWeatherUnit: HourlyWeatherUnit,
     isDay: Boolean,
 ) {
+
+    val colorCardBackGround = if (isDay) WhIte70AColor else BigTitle70AColor
+    val colorCardBorder = if (isDay) BorderCard else White08AColor
+    val textTemperatureColor = if (isDay) BigTitle87AColor else White87AColor
+    val textHourColor = if (isDay) BigTitle60AColor else White60AColor
+
+
     Box {
         Box(
             modifier = Modifier
                 .padding(top = 12.dp)
                 .clip(RoundedCornerShape(20.dp))
-                .background(WhIte70AColor)
-                .border(width = 1.dp, color = BorderCard,shape = RoundedCornerShape(20.dp))
+                .background(colorCardBackGround)
+                .border(width = 1.dp, color = colorCardBorder,shape = RoundedCornerShape(20.dp))
         ) {
             Column(
                 modifier = Modifier.padding(
@@ -54,7 +65,7 @@ fun TodayCardWeather(
                     text = "${hourly.temp} ${hourlyWeatherUnit.temperature2m}",
                     fontSize = 16.sp,
                     lineHeight = 16.sp,
-                    color = BigTitle87AColor,
+                    color = textTemperatureColor,
                     fontFamily = Urbanist_font,
                     fontWeight = FontWeight.Medium,
                     letterSpacing = 0.25.sp
@@ -64,7 +75,7 @@ fun TodayCardWeather(
                     text = hourly.date.split("T")[1],
                     fontSize = 16.sp,
                     lineHeight = 16.sp,
-                    color = BigTitle60AColor,
+                    color = textHourColor,
                     fontFamily = Urbanist_font,
                     fontWeight = FontWeight.Medium,
                     letterSpacing = 0.25.sp
