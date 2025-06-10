@@ -41,7 +41,7 @@ fun CardCurrentWeather(
             .fillMaxWidth()
             .padding(horizontal = 3.dp)
             .clip(RoundedCornerShape(26.dp))
-            .border(width = 1.dp, color = BorderCard, shape = RoundedCornerShape(24.dp))
+            .border(width = 1.dp, color = BorderCard, shape = RoundedCornerShape(26.dp))
             .background(WhIte70AColor)
     ) {
         Column(

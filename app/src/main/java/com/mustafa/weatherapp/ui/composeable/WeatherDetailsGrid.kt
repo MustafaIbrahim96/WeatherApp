@@ -57,14 +57,14 @@ fun WeatherDetailsGrid(state: WeatherUiState) {
                 painterResource(id = R.drawable.ic_pressure),
                 currentWeather.surfacePressure.toString()+ " " +
                         currentWeatherUnit.surfacePressure,
-                "Humidity"
+                "Pressure"
             )
             CardCurrentWeather(
                 Modifier.weight(1f),
                 painterResource(id = R.drawable.ic_temperature),
                 currentWeather.temperature2m.toString() +
                         currentWeatherUnit.temperature2m,
-                "Humidity"
+                "Feels like"
             )
         }
     }

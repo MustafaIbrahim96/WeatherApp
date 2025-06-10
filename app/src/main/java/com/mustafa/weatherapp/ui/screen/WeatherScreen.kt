@@ -1,5 +1,6 @@
 package com.mustafa.weatherapp.ui.screen
 
+import RowTempMaxMin
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
@@ -19,6 +20,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
@@ -32,7 +34,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -40,8 +41,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mustafa.weatherapp.R
-import com.mustafa.weatherapp.ui.composeable.CardCurrentWeather
+import com.mustafa.weatherapp.domain.entity.DailyWeatherData
+import com.mustafa.weatherapp.domain.entity.DailyWeatherUnit
+import com.mustafa.weatherapp.domain.entity.HourlyWeatherData
+import com.mustafa.weatherapp.domain.entity.HourlyWeatherUnit
 import com.mustafa.weatherapp.ui.composeable.HeaderScroll
+import com.mustafa.weatherapp.ui.composeable.TodayCardWeather
 import com.mustafa.weatherapp.ui.composeable.WeatherDetailsGrid
 import com.mustafa.weatherapp.ui.theme.BackgroundBottomBrush
 import com.mustafa.weatherapp.ui.theme.BackgroundTopBrush
@@ -67,13 +72,18 @@ fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel()) {
 @Composable
 fun WeatherContent(state: WeatherUiState?) {
 
+
     state?.let {
+        val hourlyWeather = state.weather.hourlyWeather.hourly
+        val hourlyWeatherUnit = state.weather.hourlyWeatherUnit
+        val isDay = state.weather.currentWeather.isDay
+        val dailyWeather = state.weather.dailyWeather.days
+        val dailyWeatherUnit = state.weather.dailyWeatherUnit
 
         val listState = rememberLazyListState()
         val isScrolled = remember {
             derivedStateOf {
                 listState.firstVisibleItemIndex > 0
-                        || listState.firstVisibleItemScrollOffset > 100
             }
         }
 
@@ -98,7 +108,8 @@ fun WeatherContent(state: WeatherUiState?) {
                 WeatherDetailsGrid(state)
             }
             item {
-                Text(modifier = Modifier.padding(start = 12.dp, top = 24.dp, bottom = 12.dp),
+                Text(
+                    modifier = Modifier.padding(start = 12.dp, top = 24.dp, bottom = 12.dp),
                     text = "Today",
                     fontSize = 20.sp,
                     lineHeight = 20.sp,
@@ -108,86 +119,109 @@ fun WeatherContent(state: WeatherUiState?) {
                     letterSpacing = 0.25.sp
                 )
 
-                LazyRow(contentPadding = PaddingValues(horizontal = 12.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    items(state.weather.hourlyWeather.hourly){
-                        TodayCardWeather(state)
+                LazyRow(
+                    contentPadding = PaddingValues(horizontal = 12.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    items(hourlyWeather) {
+                        TodayCardWeather(it, hourlyWeatherUnit, isDay)
                     }
                 }
+
+                Text(
+                    modifier = Modifier.padding(start = 12.dp, top = 24.dp, bottom = 12.dp),
+                    text = "Next 7 days",
+                    fontSize = 20.sp,
+                    lineHeight = 20.sp,
+                    color = BigTitleColor,
+                    fontFamily = Urbanist_font,
+                    fontWeight = FontWeight.SemiBold,
+                    letterSpacing = 0.25.sp
+                )
             }
+
             item {
-                Spacer(modifier = Modifier.height(16.dp))
-                WeatherDetailsGrid(state)
-            }
-            item {
-                Spacer(modifier = Modifier.height(16.dp))
-                WeatherDetailsGrid(state)
-            }
-            item {
-                Spacer(modifier = Modifier.height(16.dp))
-                WeatherDetailsGrid(state)
+                Box(
+                    modifier = Modifier
+                        .padding(horizontal = 12.dp)
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(24.dp))
+                        .border(width = 1.dp,
+                            color = BorderCard,
+                            shape = RoundedCornerShape(24.dp)
+                        )
+                        .background(WhIte70AColor),
+                ) {
+                    Column {
+                        dailyWeather.forEachIndexed { index, daily ->
+                            CardDailyWeather(daily, dailyWeatherUnit, isDay)
+
+                            if (index != dailyWeather.lastIndex) {
+                                Spacer(
+                                    modifier = Modifier
+                                        .height(1.dp)
+                                        .fillMaxWidth()
+                                        .background(BorderCard)
+                                )
+                            }
+                        }
+                    }
+                }
+                Spacer(modifier = Modifier.height(32.dp))
+
             }
 
         }
 
-    } ?: Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    } ?: Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(BackgroundTopBrush, BackgroundBottomBrush)
+                )
+            ), contentAlignment = Alignment.Center
+    ) {
         CircularProgressIndicator()
     }
 }
 
 @Composable
-fun TodayCardWeather(state: WeatherUiState) {
-    Box() {
+fun CardDailyWeather(
+    daily: DailyWeatherData,
+    dailyWeatherUnit: DailyWeatherUnit,
+    isDay: Boolean
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp, horizontal = 16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        Text(
+            text = daily.date,
+            fontSize = 16.sp,
+            lineHeight = 16.sp,
+            color = BigTitle60AColor,
+            fontFamily = Urbanist_font,
+            fontWeight = FontWeight.Normal,
+        )
+
         Box(
             modifier = Modifier
-                .padding(top = 12.dp)
-                .clip(RoundedCornerShape(20.dp))
-                .background(WhIte70AColor)
-                .border(width = 1.dp, color = BorderCard)
+                .height(45.dp)
+                .width(91.dp)
         ) {
-            Column(
-                modifier = Modifier.padding(
-                    top = 62.dp,
-                    end = 26.dp,
-                    start = 26.dp,
-                    bottom = 16.dp
-                ),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "25°C",
-                    fontSize = 16.sp,
-                    lineHeight = 16.sp,
-                    color = BigTitle87AColor,
-                    fontFamily = Urbanist_font,
-                    fontWeight = FontWeight.Medium,
-                    letterSpacing = 0.25.sp
-                )
-                Text(
-                    modifier = Modifier.padding(
-                        top = 4.dp,
-                    ),
-                    text = "11:00",
-                    fontSize = 16.sp,
-                    lineHeight = 16.sp,
-                    color = BigTitle60AColor,
-                    fontFamily = Urbanist_font,
-                    fontWeight = FontWeight.Medium,
-                    letterSpacing = 0.25.sp
-                )
-            }
+            Image(
+                painter = painterResource(daily.weatherCode.getIconResId(isDay)),
+                contentDescription = "Image Weather",
+                modifier = Modifier
+                    .align(Alignment.Center),
+            )
         }
-        Image(
-            painter = painterResource(id = R.drawable.img_clear_sky_day),
-            contentDescription = "cloudy",
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .padding(start = 12.dp, end = 12.dp)
-                .height(58.dp)
-                .width(64.dp),
-            contentScale = ContentScale.Fit
 
-        )
+        RowTempMaxMin(daily, dailyWeatherUnit, BigTitle87AColor)
+
     }
 }
 

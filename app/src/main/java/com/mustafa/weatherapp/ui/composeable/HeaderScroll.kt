@@ -55,32 +55,31 @@ fun HeaderScroll(
     )
     val locationTopPadding by animateDpAsState(
         targetValue = if (isScrolled) 2.dp else 0.dp,
-        animationSpec = tween(durationMillis = 375)
+        animationSpec = tween(durationMillis = 600)
     )
     val columnTempPaddingTop by animateDpAsState(
-        targetValue = if (isScrolled) 12.dp else 226.dp,
-        animationSpec = tween(durationMillis = 375)
+        targetValue = if (isScrolled) 12.dp else 216.dp,
+        animationSpec = tween(durationMillis = 600)
     )
     val columnTempPaddingEnd by animateDpAsState(
         targetValue = if (isScrolled) 12.dp else 90.dp,
-        animationSpec = tween(durationMillis = 375)
+        animationSpec = tween(durationMillis = 600)
     )
-
     val columnTempPaddingStart by animateDpAsState(
         targetValue = if (isScrolled) 0.dp else 90.dp,
-        animationSpec = tween(durationMillis = 375)
+        animationSpec = tween(durationMillis = 600)
     )
     val BoximagesPaddingStart by animateFloatAsState(
         targetValue = if (isScrolled) 12f else 67f,
-        animationSpec = tween(durationMillis = 375)
+        animationSpec = tween(durationMillis = 600)
     )
     val BoximagesPaddingEnd by animateFloatAsState(
         targetValue = if (isScrolled) 44f else 73f,
-        animationSpec = tween(durationMillis = 375)
+        animationSpec = tween(durationMillis = 600)
     )
     val imagePaddingTop by animateFloatAsState(
         targetValue = if (isScrolled) 20f else 0f,
-        animationSpec = tween(durationMillis = 375)
+        animationSpec = tween(durationMillis = 600)
     )
 
 
