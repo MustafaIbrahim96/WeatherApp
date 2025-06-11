@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -72,8 +73,10 @@ fun CardCurrentWeather(
                     color = colorTextValue,
                     fontFamily = Urbanist_font,
                     fontWeight = FontWeight.Medium,
-                    letterSpacing = 0.25.sp
+                    letterSpacing = 0.25.sp,
                 ),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
             Text(
                 modifier = Modifier.padding(top = 2.dp),

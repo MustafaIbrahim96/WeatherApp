@@ -42,7 +42,7 @@ fun CardNextDailyWeather(
     ) {
 
         Text(
-            modifier = Modifier.weight(91f),
+            modifier = Modifier.weight(75f),
             text = daily.date,
             fontSize = 16.sp,
             lineHeight = 16.sp,
@@ -54,7 +54,7 @@ fun CardNextDailyWeather(
         Box(
             modifier = Modifier
                 .height(45.dp)
-                .width(91.dp)
+                .width(85.dp)
                 .weight(91f)
         ) {
             Image(
