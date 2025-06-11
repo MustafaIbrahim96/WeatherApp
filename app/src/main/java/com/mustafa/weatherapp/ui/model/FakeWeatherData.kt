@@ -1,4 +1,4 @@
-package com.mustafa.weatherapp.ui.viewModel.state
+package com.mustafa.weatherapp.ui.model
 
 import com.mustafa.weatherapp.domain.entity.CurrentWeather
 import com.mustafa.weatherapp.domain.entity.CurrentWeatherUnit
@@ -9,7 +9,8 @@ import com.mustafa.weatherapp.domain.entity.HourlyWeather
 import com.mustafa.weatherapp.domain.entity.HourlyWeatherData
 import com.mustafa.weatherapp.domain.entity.HourlyWeatherUnit
 import com.mustafa.weatherapp.domain.entity.Weather
-import org.example.domain.model.entity.weather.WeatherCondition
+import com.mustafa.weatherapp.domain.entity.WeatherCondition
+import com.mustafa.weatherapp.ui.viewModel.state.WeatherUiState
 
 object FakeWeatherData {
 

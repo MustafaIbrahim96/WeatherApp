@@ -21,8 +21,8 @@ import com.mustafa.weatherapp.domain.entity.HourlyWeather
 import com.mustafa.weatherapp.domain.entity.HourlyWeatherData
 import com.mustafa.weatherapp.domain.entity.HourlyWeatherUnit
 import com.mustafa.weatherapp.domain.entity.Weather
+import com.mustafa.weatherapp.domain.entity.WeatherCondition
 import kotlinx.datetime.LocalDate
-import org.example.domain.model.entity.weather.WeatherCondition
 
 fun WeatherResponseDto.toWeather(): Weather {
     return Weather(

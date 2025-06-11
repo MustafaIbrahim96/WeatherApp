@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mustafa.weatherapp.domain.entity.DailyWeatherData
 import com.mustafa.weatherapp.domain.entity.DailyWeatherUnit
@@ -19,6 +20,8 @@ import com.mustafa.weatherapp.ui.theme.BigTitle70AColor
 import com.mustafa.weatherapp.ui.theme.BorderCard
 import com.mustafa.weatherapp.ui.theme.WhIte70AColor
 import com.mustafa.weatherapp.ui.theme.White08AColor
+import com.mustafa.weatherapp.ui.model.FakeWeatherData.dailyDataList
+import com.mustafa.weatherapp.ui.model.FakeWeatherData.sampleDailyWeatherUnit
 
 @Composable
 fun Next7daysWeatherCard(
@@ -57,4 +60,14 @@ fun Next7daysWeatherCard(
             }
         }
     }
+}
+
+@Preview
+@Composable
+private fun Next7daysWeatherCardPreview() {
+    Next7daysWeatherCard(
+        dailyWeather = dailyDataList,
+        dailyWeatherUnit = sampleDailyWeatherUnit,
+        isDay = true
+    )
 }

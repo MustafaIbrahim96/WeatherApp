@@ -47,6 +47,7 @@ fun HeaderScroll(
     val isDay = weatherUiState.weather.currentWeather.isDay
     val weatherCode = weatherUiState.weather.currentWeather.weatherCode
     val tempColumnPadding = getScreenWidthPx(sizePadding = 200)
+    val ImagePadding = getScreenWidthPx(sizePadding = 220)
 
     val imageSize = lerp(220.dp, 124.dp, scrollOffset)
 
@@ -63,8 +64,8 @@ fun HeaderScroll(
     val columnTempPaddingTop = lerp(216.dp, 12.dp, scrollOffset)
     val columnTempPaddingEnd = lerp(tempColumnPadding, 12.dp, scrollOffset)
     val columnTempPaddingStart = lerp(tempColumnPadding, 0.dp, scrollOffset)
-    val boxImagesPaddingStart = lerp(76.dp, 12.dp, scrollOffset)
-    val boxImagesPaddingEnd = lerp(76.dp, 44.dp, scrollOffset)
+    val boxImagesPaddingStart = lerp(ImagePadding, 12.dp, scrollOffset)
+    val boxImagesPaddingEnd = lerp(ImagePadding, 44.dp, scrollOffset)
     val imagePaddingTop =  lerp(0.dp, 20.dp, scrollOffset)
 
     val colorBlurSwitch = if (isDay) bluerColorDay else bluerColorNight

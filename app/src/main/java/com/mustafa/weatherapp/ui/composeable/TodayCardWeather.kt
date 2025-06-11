@@ -17,6 +17,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mustafa.weatherapp.domain.entity.HourlyWeatherData
@@ -68,7 +69,8 @@ fun TodayCardWeather(
                     color = textTemperatureColor,
                     fontFamily = Urbanist_font,
                     fontWeight = FontWeight.Medium,
-                    letterSpacing = 0.25.sp
+                    letterSpacing = 0.25.sp,
+                    textAlign = TextAlign.Center
                 )
                 Text(
                     modifier = Modifier.padding(top = 4.dp,),
@@ -78,7 +80,8 @@ fun TodayCardWeather(
                     color = textHourColor,
                     fontFamily = Urbanist_font,
                     fontWeight = FontWeight.Medium,
-                    letterSpacing = 0.25.sp
+                    letterSpacing = 0.25.sp,
+                    textAlign = TextAlign.Center
                 )
             }
         }
