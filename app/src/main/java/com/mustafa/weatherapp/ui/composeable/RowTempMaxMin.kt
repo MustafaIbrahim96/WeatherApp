@@ -28,17 +28,18 @@ fun RowTempMaxMin(
     currentDay: DailyWeatherData,
     dailyUnit: DailyWeatherUnit,
     color: Color,
-    iconSize:Int = 14,
-    fontSize:Int = 16,
-    iconPadding:Int = 4,
-    spacerPadding:Int = 8
+    iconSize: Int = 14,
+    fontSize: Int = 16,
+    iconPadding: Int = 4,
+    spacerPadding: Int = 8
 ) {
 
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(modifier = Modifier.size(iconSize.dp),
+        Icon(
+            modifier = Modifier.size(iconSize.dp),
             painter = painterResource(R.drawable.ic_arrow_up),
             contentDescription = "icon arrow up",
             tint = color
@@ -61,7 +62,8 @@ fun RowTempMaxMin(
                 .width(1.dp)
                 .background(BigTitle24AColor)
         )
-        Icon(modifier = Modifier.size(iconSize.dp),
+        Icon(
+            modifier = Modifier.size(iconSize.dp),
             painter = painterResource(R.drawable.ic_arrow_down),
             contentDescription = "icon arrow down",
             tint = color

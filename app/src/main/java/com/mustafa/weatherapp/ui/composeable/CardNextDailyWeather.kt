@@ -58,7 +58,8 @@ fun CardNextDailyWeather(
                 .weight(91f)
         ) {
             Image(
-                painter = painterResource(daily.weatherCode.getIconResId(isDay)),
+                painter = painterResource(daily.weatherCode.getIconResId(true
+                )),
                 contentDescription = "Image Weather",
                 modifier = Modifier
                     .align(Alignment.Center),

@@ -18,6 +18,7 @@ class WeatherApiImpl(private val client: HttpClient) : WeatherApi {
             parameter("daily", "temperature_2m_max,temperature_2m_min,weathercode,uv_index_max")
             parameter("timezone", "auto")
             parameter("hourly", "temperature_2m,weathercode")
+            parameter("forecast_days", 8)
         }
         return response.body()
     }

@@ -3,11 +3,6 @@ package com.mustafa.weatherapp.ui.composeable
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,14 +15,16 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.unit.sp
 import com.mustafa.weatherapp.R
 import com.mustafa.weatherapp.ui.theme.CityColorDay
@@ -41,48 +38,20 @@ import com.mustafa.weatherapp.ui.viewModel.state.WeatherUiState
 @Composable
 fun HeaderScroll(
     weatherUiState: WeatherUiState,
-    isScrolled: Boolean
+    scrollOffset: Float
 ) {
     val isDay = weatherUiState.weather.currentWeather.isDay
     val weatherCode = weatherUiState.weather.currentWeather.weatherCode
+    val tempColumnPadding = getScreenWidthPx(sizePadding = 200)
 
-
-    // Animation values
-    val imageSize by animateDpAsState(
-        targetValue = if (isScrolled) 124.dp else 220.dp,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioMediumBouncy,
-            stiffness = Spring.StiffnessLow
-        )
-    )
-    val locationTopPadding by animateDpAsState(
-        targetValue = if (isScrolled) 2.dp else 0.dp,
-        animationSpec = tween(durationMillis = 600)
-    )
-    val columnTempPaddingTop by animateDpAsState(
-        targetValue = if (isScrolled) 12.dp else 216.dp,
-        animationSpec = tween(durationMillis = 600)
-    )
-    val columnTempPaddingEnd by animateDpAsState(
-        targetValue = if (isScrolled) 12.dp else 90.dp,
-        animationSpec = tween(durationMillis = 600)
-    )
-    val columnTempPaddingStart by animateDpAsState(
-        targetValue = if (isScrolled) 0.dp else 90.dp,
-        animationSpec = tween(durationMillis = 600)
-    )
-    val BoximagesPaddingStart by animateFloatAsState(
-        targetValue = if (isScrolled) 12f else 67f,
-        animationSpec = tween(durationMillis = 600)
-    )
-    val BoximagesPaddingEnd by animateFloatAsState(
-        targetValue = if (isScrolled) 44f else 73f,
-        animationSpec = tween(durationMillis = 600)
-    )
-    val imagePaddingTop by animateFloatAsState(
-        targetValue = if (isScrolled) 20f else 0f,
-        animationSpec = tween(durationMillis = 600)
-    )
+    val imageSize = lerp(220.dp, 124.dp, scrollOffset)
+    val locationTopPadding = lerp(0.dp, 100.dp, scrollOffset)
+    val columnTempPaddingTop = lerp(216.dp, 12.dp, scrollOffset)
+    val columnTempPaddingEnd = lerp(tempColumnPadding, 12.dp, scrollOffset)
+    val columnTempPaddingStart = lerp(tempColumnPadding, 0.dp, scrollOffset)
+    val boxImagesPaddingStart = lerp(76.dp, 12.dp, scrollOffset)
+    val boxImagesPaddingEnd = lerp(76.dp, 44.dp, scrollOffset)
+    val imagePaddingTop =  lerp(0.dp, 20.dp, scrollOffset)
 
     val colorBlurSwitch = if (isDay) bluerColorDay else bluerColorNight
     val colorSwitch = if (isDay) CityColorDay else CityColorNight
@@ -122,9 +91,9 @@ fun HeaderScroll(
             Box(
                 modifier = Modifier
                     .padding(
-                        end = BoximagesPaddingEnd.dp,
-                        start = BoximagesPaddingStart.dp,
-                        top = imagePaddingTop.dp
+                        end = boxImagesPaddingEnd,
+                        start = boxImagesPaddingStart,
+                        top = imagePaddingTop
                     )
                     .size(imageSize)
 
@@ -149,7 +118,7 @@ fun HeaderScroll(
 
             DailyTempColumn(
                 modifier = Modifier
-                    .align(if (isScrolled) Alignment.CenterEnd else Alignment.BottomEnd)
+                    .align(Alignment.BottomEnd)
                     .padding(
                         top = columnTempPaddingTop,
                         end = columnTempPaddingEnd,
@@ -160,6 +129,15 @@ fun HeaderScroll(
         }
     }
 }
+
+@Composable
+fun getScreenWidthPx(sizePadding:Int): Dp {
+    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+    val columnWidth = sizePadding.dp
+    val horizontalPadding = (screenWidth - columnWidth) / 2
+    return horizontalPadding
+}
+
 
 @Preview
 @Composable

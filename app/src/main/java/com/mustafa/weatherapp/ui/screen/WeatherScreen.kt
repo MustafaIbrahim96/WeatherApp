@@ -57,7 +57,7 @@ fun WeatherContent(state: WeatherUiState?) {
         val hourlyWeather = state.weather.hourlyWeather.hourly
         val hourlyWeatherUnit = state.weather.hourlyWeatherUnit
         val isDay = state.weather.currentWeather.isDay
-        val dailyWeather = state.weather.dailyWeather.days
+        val dailyWeather = state.weather.dailyWeather.days.drop(1)
         val dailyWeatherUnit = state.weather.dailyWeatherUnit
 
         colorBrush =
@@ -68,9 +68,11 @@ fun WeatherContent(state: WeatherUiState?) {
 
 
         val listState = rememberLazyListState()
-        val isScrolled = remember {
+        val scrollOffset by remember {
             derivedStateOf {
-                listState.firstVisibleItemIndex > 0
+                val offset = listState.firstVisibleItemScrollOffset
+                val maxOffset = 300
+                (offset.coerceAtMost(maxOffset)).toFloat() / maxOffset
             }
         }
 
@@ -86,7 +88,7 @@ fun WeatherContent(state: WeatherUiState?) {
             }
             item {
                 Spacer(modifier = Modifier.height(22.dp))
-                HeaderScroll(state, isScrolled.value)
+                HeaderScroll(state, scrollOffset)
             }
             item {
                 WeatherDetailsGrid(state)
