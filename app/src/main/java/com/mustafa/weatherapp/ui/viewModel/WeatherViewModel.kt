@@ -22,13 +22,19 @@ class WeatherViewModel(
         viewModelScope.launch {
             val cityName = try {
                 getCityLocationUseCase().cityName
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 e.printStackTrace()
                 ""
             }
 
-            val resultWeather = getWeatherUseCase().copy(timeZone = cityName)
-            _state.value = resultWeather.toUiState()
+            try {
+                val resultWeather = getWeatherUseCase().copy(timeZone = cityName)
+                _state.value = resultWeather.toUiState()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+
         }
     }
 

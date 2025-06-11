@@ -24,6 +24,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.mustafa.weatherapp.domain.entity.CurrentWeather
+import com.mustafa.weatherapp.domain.entity.Weather
 import com.mustafa.weatherapp.ui.composeable.Next7daysWeatherCard
 import com.mustafa.weatherapp.ui.composeable.HeaderScroll
 import com.mustafa.weatherapp.ui.composeable.TodayHorizontallyScrollWithTitle
@@ -33,6 +35,7 @@ import com.mustafa.weatherapp.ui.theme.BackgroundBottomBrushNight
 import com.mustafa.weatherapp.ui.theme.BackgroundTopBrushDay
 import com.mustafa.weatherapp.ui.theme.BackgroundTopBrushNight
 import com.mustafa.weatherapp.ui.viewModel.WeatherViewModel
+import com.mustafa.weatherapp.ui.viewModel.state.FakeWeatherData.sampleWeatherUiState
 import com.mustafa.weatherapp.ui.viewModel.state.WeatherUiState
 import org.koin.androidx.compose.koinViewModel
 
@@ -121,5 +124,5 @@ fun WeatherContent(state: WeatherUiState?) {
 @Preview
 @Composable
 private fun WeatherScreenPreview() {
-    WeatherScreen()
+    WeatherContent(state = sampleWeatherUiState)
 }
