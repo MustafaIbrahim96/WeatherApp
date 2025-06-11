@@ -1,4 +1,4 @@
-package com.mustafa.weatherapp.data.datasource.service
+package com.mustafa.weatherapp.data.datasource.remote.service
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -7,7 +7,7 @@ import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.mustafa.weatherapp.data.datasource.remote.dto.AppLocationDto
-import com.mustafa.weatherapp.data.datasource.remote.mapper.toAppLocationDto
+import com.mustafa.weatherapp.data.repository.mapper.toAppLocationDto
 import com.mustafa.weatherapp.data.repository.service.LocationService
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine

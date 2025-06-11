@@ -2,7 +2,7 @@ package com.mustafa.weatherapp.data.repository
 
 import android.content.Context
 import android.location.Geocoder
-import com.mustafa.weatherapp.data.datasource.remote.mapper.toAppLocation
+import com.mustafa.weatherapp.data.repository.mapper.toAppLocation
 import com.mustafa.weatherapp.data.repository.service.LocationService
 import com.mustafa.weatherapp.domain.entity.AppLocation
 import com.mustafa.weatherapp.domain.repository.LocationRepository

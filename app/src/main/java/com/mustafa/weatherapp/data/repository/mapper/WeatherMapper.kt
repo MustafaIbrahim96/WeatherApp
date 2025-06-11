@@ -1,4 +1,4 @@
-package com.mustafa.weatherapp.data.datasource.remote.mapper
+package com.mustafa.weatherapp.data.repository.mapper
 
 import android.location.Location
 import com.mustafa.weatherapp.data.datasource.remote.dto.AppLocationDto

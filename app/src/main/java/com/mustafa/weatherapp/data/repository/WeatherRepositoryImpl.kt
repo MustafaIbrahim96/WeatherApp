@@ -1,7 +1,7 @@
 package com.mustafa.weatherapp.data.repository
 
 import com.mustafa.weatherapp.data.datasource.remote.api.WeatherApi
-import com.mustafa.weatherapp.data.datasource.remote.mapper.toWeather
+import com.mustafa.weatherapp.data.repository.mapper.toWeather
 import com.mustafa.weatherapp.domain.entity.Weather
 import com.mustafa.weatherapp.data.repository.service.LocationService
 import com.mustafa.weatherapp.domain.repository.WeatherRepository

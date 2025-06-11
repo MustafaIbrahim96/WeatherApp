@@ -6,7 +6,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.mustafa.weatherapp.data.datasource.remote.api.WeatherApi
 import com.mustafa.weatherapp.data.datasource.remote.api.WeatherApiImpl
-import com.mustafa.weatherapp.data.datasource.service.LocationServiceImpl
+import com.mustafa.weatherapp.data.datasource.remote.service.LocationServiceImpl
 import com.mustafa.weatherapp.data.repository.service.LocationService
 
 import org.koin.android.ext.koin.androidContext
