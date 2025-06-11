@@ -3,6 +3,9 @@ package com.mustafa.weatherapp.ui.composeable
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -45,6 +49,16 @@ fun HeaderScroll(
     val tempColumnPadding = getScreenWidthPx(sizePadding = 200)
 
     val imageSize = lerp(220.dp, 124.dp, scrollOffset)
+
+    val animationImageSize by animateDpAsState(
+        targetValue = imageSize,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessLow
+        ),
+        label = "springOffset"
+    )
+
     val locationTopPadding = lerp(0.dp, 100.dp, scrollOffset)
     val columnTempPaddingTop = lerp(216.dp, 12.dp, scrollOffset)
     val columnTempPaddingEnd = lerp(tempColumnPadding, 12.dp, scrollOffset)
@@ -95,7 +109,7 @@ fun HeaderScroll(
                         start = boxImagesPaddingStart,
                         top = imagePaddingTop
                     )
-                    .size(imageSize)
+                    .size(animationImageSize)
 
             ) {
                 SoftBlurredGlow(
