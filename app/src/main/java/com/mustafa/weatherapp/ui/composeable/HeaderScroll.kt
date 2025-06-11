@@ -86,7 +86,7 @@ fun HeaderScroll(
             )
             Spacer(Modifier.width(8.dp))
             Text(
-                text = weatherUiState.weather.timeZone.split("/")[1],
+                text = weatherUiState.weather.timeZone,
                 fontSize = 16.sp,
                 lineHeight = 20.sp,
                 color = colorSwitch,

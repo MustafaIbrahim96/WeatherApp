@@ -1,6 +1,7 @@
 package com.mustafa.weatherapp.data.datasource.remote.mapper
 
 import android.location.Location
+import com.mustafa.weatherapp.data.datasource.remote.dto.AppLocationDto
 import com.mustafa.weatherapp.data.datasource.remote.dto.CurrentWeatherDto
 import com.mustafa.weatherapp.data.datasource.remote.dto.CurrentWeatherUnitsDto
 import com.mustafa.weatherapp.data.datasource.remote.dto.DailyDto
@@ -124,10 +125,17 @@ fun DailyDto.toDailyDtoWeather(): DailyWeather {
     )
 }
 
-fun Location.toAppLocation(): AppLocation {
-    return AppLocation(
+fun Location.toAppLocationDto(): AppLocationDto {
+    return AppLocationDto(
         latitude = this.latitude,
         longitude = this.longitude
+    )
+}
+
+fun AppLocationDto.toAppLocation(): AppLocation {
+    return AppLocation(
+        latitude = this.latitude,
+        longitude = this.longitude,
     )
 }
 
