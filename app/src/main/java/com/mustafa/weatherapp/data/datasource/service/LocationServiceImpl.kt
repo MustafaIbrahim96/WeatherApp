@@ -4,10 +4,8 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
-import android.location.Location
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import com.mustafa.weatherapp.data.datasource.remote.mapper.toAppLocation
 import com.mustafa.weatherapp.domain.entity.AppLocation
 import com.mustafa.weatherapp.domain.provider.LocationProvider

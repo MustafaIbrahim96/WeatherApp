@@ -1,6 +1,5 @@
 package com.mustafa.weatherapp.data.datasource.remote.dto
 
-import android.icu.util.TimeZone
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

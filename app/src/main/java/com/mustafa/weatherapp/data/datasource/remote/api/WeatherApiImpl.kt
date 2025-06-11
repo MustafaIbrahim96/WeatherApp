@@ -5,7 +5,6 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
-import kotlinx.serialization.json.Json
 
 class WeatherApiImpl(private val client: HttpClient) : WeatherApi {
     override suspend fun getWeather(latitude: Double, longitude: Double): WeatherResponseDto {

@@ -12,7 +12,6 @@ class WeatherRepositoryImpl(
     private val locationProvider: LocationProvider,
     private val weatherApi: WeatherApi
 ) : WeatherRepository {
-    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun getWeather(): Weather {
         val location = locationProvider.getCurrentLocation()
         return location?.let {

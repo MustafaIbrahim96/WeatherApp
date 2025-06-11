@@ -5,8 +5,12 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
@@ -59,7 +63,8 @@ fun WeatherContent(state: WeatherUiState?) {
         colorBrush =
             Brush.verticalGradient(
                 colors = if (isDay) listOf(BackgroundTopBrushDay, BackgroundBottomBrushDay)
-                else listOf(BackgroundTopBrushNight, BackgroundBottomBrushNight))
+                else listOf(BackgroundTopBrushNight, BackgroundBottomBrushNight)
+            )
 
 
         val listState = rememberLazyListState()
@@ -74,6 +79,7 @@ fun WeatherContent(state: WeatherUiState?) {
             modifier = Modifier
                 .fillMaxSize()
                 .background(brush = colorBrush)
+                .padding(WindowInsets.systemBars.asPaddingValues())
         ) {
             item {
                 Spacer(modifier = Modifier.height(2.dp))
@@ -90,7 +96,7 @@ fun WeatherContent(state: WeatherUiState?) {
             }
 
             item {
-                Next7daysWeatherCard(dailyWeather,dailyWeatherUnit,isDay)
+                Next7daysWeatherCard(dailyWeather, dailyWeatherUnit, isDay)
                 Spacer(modifier = Modifier.height(32.dp))
 
             }

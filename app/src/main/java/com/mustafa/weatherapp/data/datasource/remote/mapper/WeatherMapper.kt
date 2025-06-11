@@ -1,8 +1,6 @@
 package com.mustafa.weatherapp.data.datasource.remote.mapper
 
 import android.location.Location
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.mustafa.weatherapp.data.datasource.remote.dto.CurrentWeatherDto
 import com.mustafa.weatherapp.data.datasource.remote.dto.CurrentWeatherUnitsDto
 import com.mustafa.weatherapp.data.datasource.remote.dto.DailyDto
@@ -22,11 +20,9 @@ import com.mustafa.weatherapp.domain.entity.HourlyWeather
 import com.mustafa.weatherapp.domain.entity.HourlyWeatherData
 import com.mustafa.weatherapp.domain.entity.HourlyWeatherUnit
 import com.mustafa.weatherapp.domain.entity.Weather
+import kotlinx.datetime.LocalDate
 import org.example.domain.model.entity.weather.WeatherCondition
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
-@RequiresApi(Build.VERSION_CODES.O)
 fun WeatherResponseDto.toWeather(): Weather {
     return Weather(
         timeZone = this.timeZone,
@@ -77,18 +73,17 @@ fun HourlyUnitsDto.toHourlyWeatherUnit(): HourlyWeatherUnit {
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 fun HourlyDto.toHourlyWeatherForToday(): HourlyWeather {
 
-    val todayDateString = getCurrentDateFormatted()
-    val fullDateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")
-
+    val today = getCurrentDateFormatted()
     val filteredIndices = mutableListOf<Int>()
 
 
     this.time.indices.forEach { index ->
-        val dateTimeFromApi = LocalDateTime.parse(this.time[index], fullDateTimeFormatter)
-        if (dateTimeFromApi.toLocalDate().toString() == todayDateString) {
+        val dateSplit = this.time[index].split("T")[0]
+        val parsedDate = LocalDate.parse(dateSplit)
+
+        if (parsedDate == today) {
             filteredIndices.add(index)
         }
     }
@@ -114,7 +109,6 @@ fun DailyUnitsDto.toDailyWeatherUnit(): DailyWeatherUnit {
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 fun DailyDto.toDailyDtoWeather(): DailyWeather {
     return DailyWeather(
         days = this.time.indices.map { index ->
