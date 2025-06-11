@@ -9,21 +9,19 @@ import com.mustafa.weatherapp.data.datasource.remote.api.WeatherApiImpl
 import com.mustafa.weatherapp.data.datasource.remote.service.LocationServiceImpl
 import com.mustafa.weatherapp.data.repository.service.LocationService
 
-import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
-val dataModule =  module {
-    single<FusedLocationProviderClient> {
-        LocationServices.getFusedLocationProviderClient(get<Context>())
+fun dataModule(appContext: Context) = module {
+    factory<FusedLocationProviderClient> {
+        LocationServices.getFusedLocationProviderClient(appContext)
     }
 
-    single<LocationService> {
+    factory<LocationService> {
         LocationServiceImpl(
-            context = androidContext(),
+            context = appContext,
             fusedLocationClient = get()
         )
     }
 
     single<WeatherApi> { WeatherApiImpl(get()) }
-
 }
