@@ -2,7 +2,6 @@ package com.mustafa.weatherapp.ui.composeable
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
@@ -19,6 +18,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.unit.sp
 import com.mustafa.weatherapp.R
+import com.mustafa.weatherapp.ui.model.FakeWeatherData
 import com.mustafa.weatherapp.ui.theme.CityColorDay
 import com.mustafa.weatherapp.ui.theme.CityColorNight
 import com.mustafa.weatherapp.ui.theme.Urbanist_font
@@ -49,24 +50,56 @@ fun HeaderScroll(
     val tempColumnPadding = getScreenWidthPx(sizePadding = 200)
     val ImagePadding = getScreenWidthPx(sizePadding = 220)
 
-    val imageSize = lerp(220.dp, 124.dp, scrollOffset)
+    // One non-bouncy spring so every dimension moves together — avoids bounce wobble and sync issues.
+    val smoothSpring = remember {
+        spring<Dp>(
+            dampingRatio = Spring.DampingRatioNoBouncy,
+            stiffness = Spring.StiffnessMediumLow,
+        )
+    }
 
+    val targetImageSize = lerp(220.dp, 124.dp, scrollOffset)
     val animationImageSize by animateDpAsState(
-        targetValue = imageSize,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioMediumBouncy,
-            stiffness = Spring.StiffnessLow
-        ),
-        label = "springOffset"
+        targetValue = targetImageSize,
+        animationSpec = smoothSpring,
+        label = "imageSize"
     )
 
-    val locationTopPadding = lerp(0.dp, 100.dp, scrollOffset)
-    val columnTempPaddingTop = lerp(216.dp, 12.dp, scrollOffset)
-    val columnTempPaddingEnd = lerp(tempColumnPadding, 12.dp, scrollOffset)
-    val columnTempPaddingStart = lerp(tempColumnPadding, 0.dp, scrollOffset)
-    val boxImagesPaddingStart = lerp(ImagePadding, 12.dp, scrollOffset)
-    val boxImagesPaddingEnd = lerp(ImagePadding, 44.dp, scrollOffset)
-    val imagePaddingTop =  lerp(0.dp, 20.dp, scrollOffset)
+    val locationTopPadding by animateDpAsState(
+        targetValue = lerp(0.dp, 100.dp, scrollOffset),
+        animationSpec = smoothSpring,
+        label = "locationTop"
+    )
+    val columnTempPaddingTop by animateDpAsState(
+        targetValue = lerp(216.dp, 12.dp, scrollOffset),
+        animationSpec = smoothSpring,
+        label = "columnTempTop"
+    )
+    val columnTempPaddingEnd by animateDpAsState(
+        targetValue = lerp(tempColumnPadding, 12.dp, scrollOffset),
+        animationSpec = smoothSpring,
+        label = "columnTempEnd"
+    )
+    val columnTempPaddingStart by animateDpAsState(
+        targetValue = lerp(tempColumnPadding, 0.dp, scrollOffset),
+        animationSpec = smoothSpring,
+        label = "columnTempStart"
+    )
+    val boxImagesPaddingStart by animateDpAsState(
+        targetValue = lerp(ImagePadding, 12.dp, scrollOffset),
+        animationSpec = smoothSpring,
+        label = "boxPadStart"
+    )
+    val boxImagesPaddingEnd by animateDpAsState(
+        targetValue = lerp(ImagePadding, 44.dp, scrollOffset),
+        animationSpec = smoothSpring,
+        label = "boxPadEnd"
+    )
+    val imagePaddingTop by animateDpAsState(
+        targetValue = lerp(0.dp, 20.dp, scrollOffset),
+        animationSpec = smoothSpring,
+        label = "imagePadTop"
+    )
 
     val colorBlurSwitch = if (isDay) bluerColorDay else bluerColorNight
     val colorSwitch = if (isDay) CityColorDay else CityColorNight
@@ -97,11 +130,7 @@ fun HeaderScroll(
             )
         }
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .animateContentSize()
-        ) {
+        Box(modifier = Modifier.fillMaxWidth()) {
 
             Box(
                 modifier = Modifier
@@ -114,9 +143,9 @@ fun HeaderScroll(
 
             ) {
                 SoftBlurredGlow(
-                    modifier = Modifier.size(imageSize),
-                    circleSize = imageSize,
-                    radius = imageSize.value,
+                    modifier = Modifier.size(animationImageSize),
+                    circleSize = animationImageSize,
+                    radius = animationImageSize.value,
                     blurColor = colorBlurSwitch
                 )
 
@@ -125,7 +154,7 @@ fun HeaderScroll(
                     contentDescription = null,
                     contentScale = ContentScale.Inside,
                     modifier = Modifier
-                        .size(imageSize)
+                        .size(animationImageSize)
                         .align(Alignment.CenterEnd)
 
                 )
@@ -146,7 +175,7 @@ fun HeaderScroll(
 }
 
 @Composable
-fun getScreenWidthPx(sizePadding:Int): Dp {
+fun getScreenWidthPx(sizePadding: Int): Dp {
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
     val columnWidth = sizePadding.dp
     val horizontalPadding = (screenWidth - columnWidth) / 2
@@ -154,8 +183,12 @@ fun getScreenWidthPx(sizePadding:Int): Dp {
 }
 
 
+@RequiresApi(Build.VERSION_CODES.S)
 @Preview
 @Composable
 private fun HeaderBeforeScrollPreview() {
-    //HeaderBeforeScroll()
+    HeaderScroll(
+        weatherUiState = WeatherUiState(weather = FakeWeatherData.sampleWeather),
+        scrollOffset = 1f
+    )
 }
